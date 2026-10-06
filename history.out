@@ -1,0 +1,152 @@
+    1  hostnamectl
+    2  sudo hostnamectl set-hostname mephi-2026.domain.local
+    3  hostnamectl
+    4  sudo nano /etc/hosts
+    5  cat /etc/hosts
+    6  hostnamectl
+    7  ip a
+    8  ping -c 2 8.8.8.8
+    9  ping -c 4 8.8.8.8 > ~/ping.out
+   10  cat ~/ping.out
+   11  sudo poweroff
+   12  df -h /mephi-web
+   13  mount | grep mephi-web
+   14  sudo fdisk -l /dev/sdb
+   15  sudo blkid /dev/sdb1
+   16  cat /etc/fstab
+   17  df -h /mephi-web
+   18  sudo systemctl enable --now nginx
+   19  systemctl status nginx
+   20  systemctl is-enabled nginx
+   21  systemctl is-active nginx
+   22  sudo journalctl -u nginx -b > ~/journalctl.out
+   23  cat ~/journalctl.out
+   24  wc -l ~/journalctl.out
+   25  curl http://localhost/
+   26  sudo systemctl enable --now nginx
+   27  sudo journalctl -u nginx -b > ~/journalctl.out
+   28  systemctl is-enabled nginx
+   29  systemctl is-active nginx
+   30  wc -l ~/journalctl.out
+   31  sudo ss -tlnp | grep :80
+   32  sudo systemctl restart nginx
+   33  sudo journalctl -u nginx -b > ~/journalctl.out
+   34  wc -l ~/journalctl.out
+   35  cat ~/journalctl.out
+   36  sudo mkdir -p /data/mephi-2026
+   37  sudo useradd -u 5501 -m -s /bin/bash user1
+   38  sudo useradd -u 5502 -m -s /bin/bash user2
+   39  sudo useradd -u 5503 -m -s /bin/bash user3
+   40  id user1; id user2; id user3
+   41  sudo groupadd -g 4444 curators
+   42  sudo useradd -g curators -m -s /bin/bash curator1
+   43  sudo useradd -g curators -m -s /bin/bash curator2
+   44  getent group curators
+   45  id curator1; id curator2
+   46  sudo groupadd developers
+   47  sudo usermod -aG developers user1
+   48  sudo usermod -aG developers user2
+   49  sudo usermod -aG developers user3
+   50  getent group developers
+   51  sudo chown root:developers /data/mephi-2026
+   52  sudo chmod 2770 /data/mephi-2026
+   53  sudo setfacl -m g:curators:rx /data/mephi-2026
+   54  sudo setfacl -d -m g:developers:rwx /data/mephi-2026
+   55  sudo setfacl -d -m g:curators:rx /data/mephi-2026
+   56  sudo setfacl -d -m o::--- /data/mephi-2026
+   57  for u in user1 user2 user3; do  echo "umask0077" | sudo tee -a /home/$u/.bashrc; done
+   58  ls -ld /data/mephi-2026
+   59  getfacl /data/mephi-2026
+   60  sudo -u user1 bash -c 'cd /data/mephi-2026 && echo "from user1" > f1.txt && ls -la'
+   61  sudo -u user2 bash -c 'cat /data/mephi-2026/f1.txt'
+   62  sudo -u user2 bash -c 'echo "from user2" >> /data/mephi-2026/f1.txt && cat /data/mephi-2026/f1.txt'
+   63  sudo -u curator1 bash -c 'cat /data/mephi-2026/f1.txt'
+   64  sudo -u curator1 bash -c 'echo "hack" >> /data/mephi-2026/f1.txt'
+   65  id user1; id user2; id user3; id curator1; id curator2
+   66  getent group curators developers
+   67  ls -ld /data/mephi-2026
+   68  getfacl /data/mephi-2026
+   69  sudo -u user1 bash -c 'cd /data/mephi-2026 && echo text > f1.txt && ls -la'
+   70  sudo -u curator1 bash -c 'echo hack >> /data/mephi-2026/f1.txt'
+   71  ls -la /usr/sbin/tcpdump
+   72  sudo chmod u-s /usr/sbin/tcpdump
+   73  sudo setcap cap_net_admin, cap_net_raw+ep /usr/sbin/tcpdump
+   74  ls -la /usr/sbin/tcpdump
+   75  file /usr/sbin/tcpdump
+   76  readlink -f /usr/sbin/tcpdump
+   77  which tcpdump
+   78  rpm -ql tcpdump | grep bin
+   79  sudo setcap cap_net_admin,cap_net_raw+ep /usr/sbin/tcpdump
+   80  getccap /usr/sbin/tcpdump
+   81  getcap /usr/sbin/tcpdump
+   82  sudo -u user1 tcpdump -c 3 -i any
+   83  ls -la /usr/sbin/tcpdump
+   84  file /usr/sbin/tcpdump
+   85  readlink -f /usr/sbin/tcpdump
+   86  rpm -ql tcpdump | grep bin
+   87  which tcpdump
+   88  sudo -u user1 tcpdump -c 3 -i any
+   89  getcap /usr/sbin/tcpdump > ~/getcap.out
+   90  cat ~/getcap.out
+   91  getenforce
+   92  setstatus | head -5
+   93  getenforce
+   94  sestatus | head -5
+   95  getenforce > ~/getenforce.out
+   96  cat ~/getenforce.out
+   97  echo "Hello from Student: 372929" | sudo tee /mephi-web/index.html
+   98  cat /mephi-web/index.html
+   99  ls -la /mephi-web/
+  100  sudo nano /etc/nginx/nginx.conf
+  101  sudo nginx -t
+  102  which semanage
+  103  sudo semanage fcontext -a -t httpd_sys_content_t "/mephi-web(/.*)?"
+  104  sudo restorecon -Rv /mephi-web/
+  105  ls -Zd /mephi-web/
+  106  ls -Z /mephi-web/index.html
+  107  sudo systemctl restart nginx
+  108  curl http://localhost/
+  109  curl http://localhost/ > ~/curl.out
+  110  cat ~/curl.out
+  111  getenforce > ~/getenforce.out
+  112  getcap /usr/sbin/tcpdump > ~/getcap.out
+  113  stat /data/mephi-2026 > ~/stat.out
+  114  stat /mephi-web >> ~/stat.out
+  115  getenforce
+  116  ls -Zd /mephi-web/
+  117  curl http://localhost/
+  118  ls -la ~/*.out
+  119  sudo touch /etc/denied_users
+  120  sudo bash -c 'echo "curator1" >> /etc/denied_users'
+  121  sudo bash -c 'echo "curator2" >> /etc/denied_users'
+  122  sudo nano /etc/pam.d/login
+  123  sudo nano /etc/pam.d/system-auth
+  124  sudo cp /etc/pam.d/system-auth /etc/pam.d/system-auth.bak
+  125  sudo cp /etc/pam.d/login /etc/pam.d/login.bak
+  126  exit
+  127  ls /sbin/mount.vboxsf 2>/dev/null
+  128  sudo mkdir -p /mnt/share
+  129  sudo mount -t vboxsf share /mnt/share
+  130  ls /mnt/share
+  131  sudo systemctl enable --now sshd
+  132  ip a | grep inet
+  133  sudo mkdir -p /mnt/share
+  134  sudo mount -t vboxsf share /mnt/share
+  135  curl -o ~/mephi-screenshot.png http://10.0.2.2:8000/mephi-screenshot.png
+  136  ls -la ~/mephi-screenshot.png
+  137  curl -o ~/mephi-screenshot.png http://10.0.2.2:8000/mephi-screenshot.png
+  138  ping -c 2 10.0.2.2
+  139* ip a | grep in
+  140  ping -c 2 192.168.56.1
+  141  curl -o ~/mephi-screenshot.png http://192.168.56.1:8000/mephi-screenshot.png
+  142  sudo cp /etc/fstab ~/fstab
+  143  sudo cp /etc/passwd ~/passwd
+  144  sudo cp /etc/group ~/group
+  145  sudo cp /etc/security/pwquality.conf ~/pwquality.conf
+  146  sudo awk -F: 'BEGIN{OFS=":" {$2="x"; print}}' etc/shadow > ~/shadow
+  147  sudo awk -F: 'BEGIN{OFS=":"} {$2="x"; print}' etc/shadow > ~/shadow
+  148  ls /etc/shadow
+  149  sudo awk -F: 'BEGIN{OFS=":"} {$2="x"; print}' etc/shadow > ~/shadow
+  150  sudo awk -F: 'BEGIN{OFS=":"} {$2="x"; print}' /etc/shadow > ~/shadow
+  151  sudo chown kokos:kokos ~/fstab ~/passwd  ~/group ~/pwquality.conf ~/shadow
+  152  history > ~/history.out
